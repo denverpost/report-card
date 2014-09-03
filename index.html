@@ -9,13 +9,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <style type="text/css" media="screen">
+.letter
+{
+    font-family: 'Ultra', serif;
+    text-transform: uppercase;
+    font-size: 3em;
+    color: rgb(50,50,150);
+    display: block;
+    width: 1em;
+    height: 1.5em;
+    border: 1px solid rgb(155,155,155);
+}
 </style>
+<link href='http://fonts.googleapis.com/css?family=Ultra' rel='stylesheet' type='text/css'>
 </head>
 <body>
     <header>
         <h1>Report Card</h1>
     </header>
+    <section>
+        <h2>Report Card Title</h2>
+        <p>Description</p>
+        <form>
+            <!-- For javascript-enabled browsers -->
+            <a href="#" class="letter" id="a" onClick="updateForm(this);">A</a>
 
+            <!-- For non-javascript-enabled browsers -->
+            <select id="grade_select" size="5">
+                <option value="a">A</option>
+                <option value="b">B</option>
+                <option value="c">C</option>
+                <option value="d">D</option>
+                <option value="f">F</option>
+            </select>
+            <script>jQuery('#grade_select').hide();</script>
+
+            <input type="image" src="images/default/grade-submit.gif" alt="Submit Your Grade">
+        </form>
+    </section>
     <footer>
     </footer>
 </body>
