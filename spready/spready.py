@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # A wrapper for handling Google spreadsheet updates
+# Note: You'll need a key to access the spreadsheet. You can create one here:
+# https://accounts.google.com/b/0/IssuedAuthSubTokens?hide_authsub=1
 import os
 import sys
 import json
 import gspread
-from filewrapper import FileWrapper
+from filewrapper.FileWrapper import FileWrapper
 from optparse import OptionParser
 import doctest
 
@@ -17,13 +19,17 @@ class Spready:
         {u'test': 1}
         """
     def __init__(self, *args, **kwargs):
-        self.fw = FileWrapper()
-        self.verbose = True
-        self.sheet_name = 'report-card-master'
-        self.directory = os.path.dirname(os.path.realpath(__file__))
+        """ init expects a dict of keyword arguments looking something like:
+
+            """
+        print kwargs
+        if 'verbose' in kwargs:
+            self.verbose = True
+        self.output_path = kwargs['output_path']
+        self.sheet_name = kwargs['sheet_name']
         google = {
-            'key': self.fw.read_file('%s/.googlekey' % self.directory),
-            'account': ''
+            'key': kwargs['key'],
+            'account': kwargs['account']
         }
         self.spread = gspread.login(google['account'], google['key'])
 
@@ -36,6 +42,16 @@ class Spready:
             """
         self.sheet_name = value
         return self.sheet_name
+
+    def set_worksheet(self, value):
+        """ Set the object's worksheet var.
+            >>> spready = Spready('test.txt')
+            >>> worksheet = spready.set_worksheet('worksheet-master')
+            >>> print worksheet
+            worksheet-master
+            """
+        self.worksheet = value
+        return self.worksheet
 
     def slugify(self, slug):
         return slug.lower().replace(' ', '-')
@@ -62,16 +78,18 @@ class Spready:
             # First update the slug
             sheet.update_cell(i, col, slug)
             
-    def publish(self, worksheet, options):
+    def publish(self, options, worksheet=None):
         """ Write the worksheet data as a json object that can be 
             included on the site.
             """
+        if worksheet == None:
+            worksheet = self.worksheet
         sheet = self.spread.open(self.sheet_name).worksheet(worksheet)
         rows = sheet.get_all_values()
         keys = rows[0]
         i = 0 
         lines = []
-        fn= open('%s/_output/%s.json' % (self.directory, worksheet), 'w');
+        fn= open('%s%s.json' % (self.output_path, worksheet), 'w');
         fn.write('{')
         for row in rows:
             i += 1
