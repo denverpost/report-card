@@ -4,9 +4,9 @@ import os
 import sys
 import json
 import gspread
-import unirest
 from filewrapper import FileWrapper
 from optparse import OptionParser
+import doctest
 
 
 class Spready:
@@ -16,7 +16,7 @@ class Spready:
         >>> print spready.json
         {u'test': 1}
         """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.fw = FileWrapper()
         self.verbose = True
         self.sheet_name = 'report-card-master'
@@ -27,6 +27,16 @@ class Spready:
         }
         self.spread = gspread.login(google['account'], google['key'])
 
+    def set_sheet_name(self, value):
+        """ Set the object's sheet_name var.
+            >>> spready = Spready('test.txt')
+            >>> sheet_name = spready.set_sheet_name('worksheet-master')
+            >>> print sheet_name
+            worksheet-master
+            """
+        self.sheet_name = value
+        return self.sheet_name
+
     def slugify(self, slug):
         return slug.lower().replace(' ', '-')
 
@@ -34,6 +44,7 @@ class Spready:
         """ Loop through a sheet and perform a certain action on a certain
             field in each record. Until this needs to be more, it will be
             hard-coded.
+            *** Too hard-coded to be useful, currently.
             """
         sheet = self.spread.open(self.sheet_name).worksheet('popular')
         rows = sheet.get_all_values()
@@ -60,7 +71,7 @@ class Spready:
         keys = rows[0]
         i = 0 
         lines = []
-        fn= open('%s/output/%s.json' % (self.directory, worksheet), 'w');
+        fn= open('%s/_output/%s.json' % (self.directory, worksheet), 'w');
         fn.write('{')
         for row in rows:
             i += 1
@@ -86,16 +97,18 @@ class Spready:
 if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option("-a", "--action", dest="action", default="update")
-    parser.add_option("-v", "--verbose", dest="verbose", action="store_true")
+    parser.add_option("-v", "--verbose", dest="verbose", action="store_true", default=False)
     (options, args) = parser.parse_args()
-    # The spreadsheets we're dealing with will be passed as arguments to the script.
+
+    doctest.testmod(verbose=options.verbose)
+
+    # The names of the worksheets within the spreadsheets we're dealing with 
+    # should be passed as arguments to the script.
     # Ex:
     # >>> ./filename.py -a publish dispensary city strain
 
     spready = Spready()
     for arg in args:
-        if options.action == 'update':
-            spready.update(arg, options)
         if options.action == 'update_sheet':
             spready.update_sheet(arg, options)
         if options.action == 'publish':
