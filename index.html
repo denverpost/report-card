@@ -15,11 +15,18 @@
     text-transform: uppercase;
     font-size: 3em;
     color: rgb(50,50,150);
-    display: block;
-    width: 1em;
-    height: 1.5em;
-    border: 1px solid rgb(155,155,155);
     text-decoration: none;
+}
+.letter_grades > div
+{
+    vertical-align: middle;
+    text-align: center;
+    vertical-align: middle;
+    float: left;
+    width: 100px;
+    height: 100px;
+    background: url('images/paper-bg-white.jpg') no-repeat;
+    background-size: contain;
 }
 </style>
 <link href='http://fonts.googleapis.com/css?family=Ultra' rel='stylesheet' type='text/css'>
@@ -48,11 +55,13 @@ function update_form(element)
     jQuery('#grade_input').val(lookup[element.id]);
 }
 </script>
-            <a href="#" class="letter" id="a" onClick="update_form(this);">A</a>
-            <a href="#" class="letter" id="b" onClick="update_form(this);">B</a>
-            <a href="#" class="letter" id="c" onClick="update_form(this);">C</a>
-            <a href="#" class="letter" id="d" onClick="update_form(this);">D</a>
-            <a href="#" class="letter" id="f" onClick="update_form(this);">F</a>
+            <div class="letter_grades">
+                <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>
+                <div><a href="#" class="letter" id="b" onClick="update_form(this);">B</a></div>
+                <div><a href="#" class="letter" id="c" onClick="update_form(this);">C</a></div>
+                <div><a href="#" class="letter" id="d" onClick="update_form(this);">D</a></div>
+                <div><a href="#" class="letter" id="f" onClick="update_form(this);">F</a></div>
+            </div>
 
             <input type="hidden" id="grade_input" value="-1" />
 
