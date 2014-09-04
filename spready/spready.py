@@ -21,8 +21,11 @@ class Spready:
         self.verbose = True
         self.sheet_name = 'report-card-master'
         self.directory = os.path.dirname(os.path.realpath(__file__))
-        googlekey = self.fw.read_file('%s/.googlekey' % self.directory)
-        self.spread = gspread.login('joe.murphy@gmail.com', googlekey)
+        google = {
+            'key': self.fw.read_file('%s/.googlekey' % self.directory),
+            'account': ''
+        }
+        self.spread = gspread.login(google['account'], google['key'])
 
     def slugify(self, slug):
         return slug.lower().replace(' ', '-')
@@ -47,15 +50,6 @@ class Spready:
             slug = self.slugify(row[0])
             # First update the slug
             sheet.update_cell(i, col, slug)
-            # Then use the slug to populate the details of the rest of the record.
-            response = unirest.get(self.api_query['strain-details'].replace('{{slug}}', slug),
-                       headers={ "X-Mashape-Authorization": self.api_key })
-            if response.code != 500:
-                items = response.body
-                for item in items:
-                    if item in keys:
-                        col = keys.index(item) + 1
-                        sheet.update_cell(i, col, items[item])
             
     def publish(self, worksheet, options):
         """ Write the worksheet data as a json object that can be 
