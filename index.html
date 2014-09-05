@@ -38,7 +38,7 @@
     <section>
         <h2>Report Card Title</h2>
         <p>Description</p>
-        <form id="slug" action="http://denverpostplus.com/app/report-card/" method="POST">
+        <form id="slug" action="http://denverpostplus.com/app/report-card/index.php" method="POST">
             <!-- For javascript-enabled browsers -->
 <script>
 // NOTE: MUST BE ABLE TO WORK WITH MORE THAN ONE REPORT CARD ON A PAGE
@@ -56,7 +56,7 @@ function update_form(element)
 }
 
 // AJAX requests aren't ready yet.
-$("#sluggy").submit(function(e)
+$("#slug").submit(function(e)
 {
     var post_data = $(this).serializeArray();
     var formURL = $(this).attr("action");
@@ -65,19 +65,18 @@ $("#sluggy").submit(function(e)
         url: formURL,
         type: "POST",
         data: post_data,
-        success:function(data, textStatus, jqXHR) 
+        success:function(data, text_status, jqXHR) 
         {
-            //data: return data from server
-            console.log(data, textStatuds, jqXHR);
+            // data: return data from server
+            console.log(data, text_status, jqXHR);
         },
-        error: function(jqXHR, textStatus, errorThrown) 
+        error: function(jqXHR, text_status, error_thrown) 
         {
-            //if fails      
-            console.log(data, textStatus, errorThrown);
+            console.log(data, text_status, error_thrown);
         }
     });
     e.preventDefault(); // STOP default action
-    e.unbind(); // unbind. to stop multiple form submit.
+    //e.unbind(); // unbind. to stop multiple form submit.
 });
  
 //$("#slug").submit();
@@ -94,11 +93,12 @@ $("#sluggy").submit(function(e)
 
             <!-- For non-javascript-enabled browsers -->
             <select id="grade_select" size="5">
-                <option value="a">A</option>
-                <option value="b">B</option>
-                <option value="c">C</option>
-                <option value="d">D</option>
-                <option value="f">F</option>
+                <option value="-1" default></option>
+                <option value="4">A</option>
+                <option value="3">B</option>
+                <option value="2">C</option>
+                <option value="1">D</option>
+                <option value="0">F</option>
             </select>
             <script>jQuery('#grade_select').hide();</script>
 
