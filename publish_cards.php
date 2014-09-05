@@ -7,6 +7,11 @@
 //  2. If it's not, add the card to the db
 //  3. If it's not, write the card javascript file and FTP it to extras
 
+// VIM note: To make a large chunk of markup javascript-friendly,
+// I appended the literal string "\n\" before each newline character with this search and replace:
+// :92,110s/\n/\\n\\\r/
+// where 92 and 110 are the lines to start replace and the lines to end.
+
 date_default_timezone_set('America/Denver');
 $connection = array(
     'user' => file_get_contents('.mysql_user'),
@@ -75,7 +80,7 @@ foreach ( $csv as $item ):
         $sql = 'INSERT INTO cards (slug, title, description, date_launch, date_expire, grade_average, grades) 
                 VALUES
                 ("' . $record['slug'] . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
-        //$result = $db->query($sql);
+        $result = $db->query($sql);
 
         // Now we write the file
         $slug = str_replace('-', '_', $record['slug']);
@@ -85,7 +90,43 @@ var ' . $slug . ' = {
     description: "' . clean_string($record['Description']) . '",
     slug: "' . $slug . '",
     date_launch: "' . $record['Date launches'] . '",
-    date_expire: "' . $record['Date expires'] . '"
+    date_expire: "' . $record['Date expires'] . '",
+    markup_skeleton: '\n\
+        <form id="' . $slug . '" action="http://denverpostplus.com/app/report-card/index.php" method="POST">\n\
+            <h2></h2>\n\
+            <p></p>\n\
+            <div class="letter_grades">\n\
+                <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>\n\
+                <div><a href="#" class="letter" id="b" onClick="update_form(this);">B</a></div>\n\
+                <div><a href="#" class="letter" id="c" onClick="update_form(this);">C</a></div>\n\
+                <div><a href="#" class="letter" id="d" onClick="update_form(this);">D</a></div>\n\
+                <div><a href="#" class="letter" id="f" onClick="update_form(this);">F</a></div>\n\
+            </div>\n\
+\n\
+            <input type="hidden" id="grade_input" name="grade_input" value="-1" />\n\
+\n\
+            <!-- For non-javascript-enabled browsers -->\n\
+            <select id="grade_select" size="5">\n\
+                <option value="-1" default></option>\n\
+                <option value="4">A</option>\n\
+                <option value="3">B</option>\n\
+                <option value="2">C</option>\n\
+                <option value="1">D</option>\n\
+                <option value="0">F</option>\n\
+            </select>\n\
+            <script>jQuery("#grade_select").hide();</script>\n\
+\n\
+            <input type="image" src="images/default/grade-submit.gif" alt="Submit Your Grade">\n\
+            <div id="result">\n\
+                <div><a class="letter"></a></div>\n\
+                <p></p>\n\
+            </div>\n\
+        </form>\n\
+    ',
+    init: function()
+    {
+        
+    }
     };';
         $content .= "
 function update_form(element)
@@ -123,9 +164,10 @@ $('#" . $slug . "').submit(function(e)
     });
     e.preventDefault(); // STOP default action
     e.unbind(); // unbind. to stop multiple form submit.
-});
+});";
  
-//$('#" . $slug . "').submit();";
+
+        
         echo $content;
     endif;
 endforeach;
