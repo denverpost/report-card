@@ -3,10 +3,11 @@
     font-family: 'Ultra', serif;
     text-transform: uppercase;
     font-size: 3em;
-    color: rgb(50,50,150);
+    color: #0B0B61;
     text-decoration: none;
 }
-.letter_grades > div
+.letter_highlight { color: #DF013A; }
+.letter_grades > div, #result > div
 {
     vertical-align: middle;
     text-align: center;
@@ -14,7 +15,16 @@
     float: left;
     width: 100px;
     height: 100px;
+    padding-top: 20px;
     background: url('images/paper-bg-white.jpg') no-repeat;
     background: url('http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035418_paper-bg-white.jpg') no-repeat;
     background-size: contain;
+}
+#result { clear:both; }
+#result .letter { font-size: 5em; }
+#result > div
+{
+    width: 168px;
+    height: 168px;
+    padding-top: 30px;
 }

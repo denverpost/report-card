@@ -8,28 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<style type="text/css" media="screen">
-.letter
-{
-    font-family: 'Ultra', serif;
-    text-transform: uppercase;
-    font-size: 3em;
-    color: rgb(50,50,150);
-    text-decoration: none;
-}
-.letter_grades > div
-{
-    vertical-align: middle;
-    text-align: center;
-    vertical-align: middle;
-    float: left;
-    width: 100px;
-    height: 100px;
-    background: url('images/paper-bg-white.jpg') no-repeat;
-    background: url('http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035418_paper-bg-white.jpg') no-repeat;
-    background-size: contain;
-}
-</style>
+<link href="reportcard.css" rel="stylesheet" type="text/css">
 <link href='http://fonts.googleapis.com/css?family=Ultra' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -49,6 +28,14 @@ function update_form(element)
         d: 1,
         f: 0
     };
+    var letters = ['a', 'b', 'c', 'd', 'f'];
+    var letter_count = 5;
+    for ( i = 0; i < letter_count; i++ )
+    {
+        jQuery("#slug .letter_grades #" + letters[i]).removeClass('letter_highlight');
+    }
+
+    jQuery("#slug .letter_grades #" + element.id).addClass('letter_highlight');
     jQuery('#slug #grade_input').val(lookup[element.id]);
 }
 
