@@ -27,4 +27,4 @@ if __name__ == '__main__':
         'key': key.read().strip()
     }
     spready = Spready(**config)
-    spready.publish(options, 'responses')
+    rows = spready.get_rows(options, 'responses')
