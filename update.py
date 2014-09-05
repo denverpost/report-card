@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # Update the Report Card javascript files
 import os
-import sys
-import json
+import csv
 import gspread
 from spready.filewrapper.FileWrapper import FileWrapper
 from optparse import OptionParser
 from spready.spready import Spready
-import doctest
 
 if __name__ == '__main__':
     parser = OptionParser()
@@ -39,5 +37,9 @@ if __name__ == '__main__':
     # ingest that flatfile with PHP and do all the database / FTP work with PHP.
     #
     # Sigh.
+
+    fh = open('cards.csv', 'w')
+    writer = csv.writer(fh)
     for row in rows:
-        pass
+        writer.writerow(row)
+    fh.close()
