@@ -19,7 +19,7 @@ if ( $db->connect_errno )
     //die('Could not connect to database: ' . $db->connect_error);
 }
 
-function clean_string($value, $quote_char='"')
+function clean_string($string, $quote_char='"')
 {
     // Clean a string so it's suitable for writing in a javascript file.
     // Defaults to escaping out for double quotes.
@@ -78,14 +78,54 @@ foreach ( $csv as $item ):
         //$result = $db->query($sql);
 
         // Now we write the file
+        $slug = str_replace('-', '_', $record['slug']);
         $content = '
-var ' . str_replace('-', '_', $record['slug']) . ' = {
+var ' . $slug . ' = {
     title: "' . clean_string($record['Title']) . '",
     description: "' . clean_string($record['Description']) . '",
-    slug: "' . str_replace('-', '_', $record['slug']) . '",
+    slug: "' . $slug . '",
     date_launch: "' . $record['Date launches'] . '",
     date_expire: "' . $record['Date expires'] . '"
     };';
+        $content .= "
+function update_form(element)
+{
+    // Convert letter grade to numeric value
+    var lookup = {
+        a: 4,
+        b: 3,
+        c: 2,
+        d: 1,
+        f: 0
+    };
+    jQuery('#slug #grade_input').val(lookup[element.id]);
+}
+
+// AJAX requests aren't ready yet.
+$('#" . $slug . "').submit(function(e)
+{
+    var post_data = $(this).serializeArray();
+    var formURL = $(this).attr('action');
+    $.ajax(
+    {
+        url: formURL,
+        type: 'POST',
+        data: post_data,
+        success:function(data, text_status, jqXHR) 
+        {
+            // data: return data from server
+            console.log(data, text_status, jqXHR);
+        },
+        error: function(jqXHR, text_status, error_thrown) 
+        {
+            console.log(data, text_status, error_thrown);
+        }
+    });
+    e.preventDefault(); // STOP default action
+    e.unbind(); // unbind. to stop multiple form submit.
+});
+ 
+//$('#" . $slug . "').submit();";
         echo $content;
     endif;
 endforeach;

@@ -36,12 +36,8 @@
         <h1>Report Card</h1>
     </header>
     <section>
-        <h2>Report Card Title</h2>
-        <p>Description</p>
-        <form id="slug" action="http://denverpostplus.com/app/report-card/index.php" method="POST">
             <!-- For javascript-enabled browsers -->
 <script>
-// NOTE: MUST BE ABLE TO WORK WITH MORE THAN ONE REPORT CARD ON A PAGE
 function update_form(element)
 {
     // Convert letter grade to numeric value
@@ -52,18 +48,18 @@ function update_form(element)
         d: 1,
         f: 0
     };
-    jQuery('#grade_input').val(lookup[element.id]);
+    jQuery('#slug #grade_input').val(lookup[element.id]);
 }
 
 // AJAX requests aren't ready yet.
-$("#slug").submit(function(e)
+$('#slug').submit(function(e)
 {
     var post_data = $(this).serializeArray();
-    var formURL = $(this).attr("action");
+    var formURL = $(this).attr('action');
     $.ajax(
     {
         url: formURL,
-        type: "POST",
+        type: 'POST',
         data: post_data,
         success:function(data, text_status, jqXHR) 
         {
@@ -79,8 +75,11 @@ $("#slug").submit(function(e)
     //e.unbind(); // unbind. to stop multiple form submit.
 });
  
-//$("#slug").submit();
+//$('#slug').submit();
 </script>
+        <h2>Report Card Title</h2>
+        <p>Description</p>
+        <form id="slug" action="http://denverpostplus.com/app/report-card/index.php" method="POST">
             <div class="letter_grades">
                 <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>
                 <div><a href="#" class="letter" id="b" onClick="update_form(this);">B</a></div>
@@ -100,9 +99,13 @@ $("#slug").submit(function(e)
                 <option value="1">D</option>
                 <option value="0">F</option>
             </select>
-            <script>jQuery('#grade_select').hide();</script>
+            <script>jQuery("#grade_select").hide();</script>
 
             <input type="image" src="images/default/grade-submit.gif" alt="Submit Your Grade">
+            <div id="result">
+                <div><a class="letter"></a></div>
+                <p></p>
+            </div>
         </form>
     </section>
     <footer>
