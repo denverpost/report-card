@@ -38,7 +38,7 @@
     <section>
         <h2>Report Card Title</h2>
         <p>Description</p>
-        <form id="slug" action="" method="POST">
+        <form id="slug" action="http://denverpostplus.com/app/report-card/" method="POST">
             <!-- For javascript-enabled browsers -->
 <script>
 // NOTE: MUST BE ABLE TO WORK WITH MORE THAN ONE REPORT CARD ON A PAGE
@@ -54,6 +54,33 @@ function update_form(element)
     };
     jQuery('#grade_input').val(lookup[element.id]);
 }
+
+// AJAX requests aren't ready yet.
+$("#sluggy").submit(function(e)
+{
+    var post_data = $(this).serializeArray();
+    var formURL = $(this).attr("action");
+    $.ajax(
+    {
+        url: formURL,
+        type: "POST",
+        data: post_data,
+        success:function(data, textStatus, jqXHR) 
+        {
+            //data: return data from server
+            console.log(data, textStatuds, jqXHR);
+        },
+        error: function(jqXHR, textStatus, errorThrown) 
+        {
+            //if fails      
+            console.log(data, textStatus, errorThrown);
+        }
+    });
+    e.preventDefault(); // STOP default action
+    e.unbind(); // unbind. to stop multiple form submit.
+});
+ 
+//$("#slug").submit();
 </script>
             <div class="letter_grades">
                 <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>
@@ -63,7 +90,7 @@ function update_form(element)
                 <div><a href="#" class="letter" id="f" onClick="update_form(this);">F</a></div>
             </div>
 
-            <input type="hidden" id="grade_input" value="-1" />
+            <input type="hidden" id="grade_input" name="grade_input" value="-1" />
 
             <!-- For non-javascript-enabled browsers -->
             <select id="grade_select" size="5">

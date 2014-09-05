@@ -22,7 +22,6 @@ class Spready:
         """ init expects a dict of keyword arguments looking something like:
 
             """
-        print kwargs
         if 'verbose' in kwargs:
             self.verbose = True
         self.output_path = kwargs['output_path']
