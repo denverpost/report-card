@@ -125,11 +125,14 @@ var ' . $slug . ' = {
     \',
     init: function()
     {
+        // HARD-CODED, for now ***
         $("#articleBody").append(this.markup_skeleton);
         $("#' . $slug . ' > h2").text(this.title);
         $("#' . $slug . ' > p").text(this.description);
     }
-    };';
+    };
+window.onload = ' . $slug . '.init();
+';
         $content .= "
 function update_form(element)
 {
@@ -191,6 +194,6 @@ $('#" . $slug . "').submit(function(e)
  
 
         
-        echo $content;
+        file_put_contents('_output/' . $slug, $content);
     endif;
 endforeach;
