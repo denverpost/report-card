@@ -77,14 +77,20 @@ class Spready:
             # First update the slug
             sheet.update_cell(i, col, slug)
             
-    def publish(self, options, worksheet=None):
-        """ Write the worksheet data as a json object that can be 
-            included on the site.
+    def get_rows(self, options, worksheet=None):
+        """ Get the data from the spreadsheet.
             """
-        if worksheet == None:
+        if worksheet is None:
             worksheet = self.worksheet
         sheet = self.spread.open(self.sheet_name).worksheet(worksheet)
         rows = sheet.get_all_values()
+        return rows
+        
+    def publish_json(self, options, worksheet=None):
+        """ Write the worksheet data as a json object that can be 
+            included on the site.
+            """
+        rows = self.get_rows(options, worksheet)
         keys = rows[0]
         i = 0 
         lines = []
