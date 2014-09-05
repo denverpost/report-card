@@ -51,7 +51,21 @@ function update_form(element)
     jQuery('#slug #grade_input').val(lookup[element.id]);
 }
 
-// AJAX requests aren't ready yet.
+function lookup_letter_grade(avg)
+{
+    // Takes a float and returns a string letter-grade representation of that value.
+    if ( avg > 3.8 ) return 'A';
+    if ( avg > 3.5 ) return 'A-';
+    if ( avg > 3.2 ) return 'B+';
+    if ( avg > 2.8 ) return 'B';
+    if ( avg > 2.5 ) return 'B-';
+    if ( avg > 2.2 ) return 'C+';
+    if ( avg > 1.8 ) return 'C';
+    if ( avg > 1.5 ) return 'C-';
+    if ( avg > .5 ) return 'D';
+    return 'F';
+}
+
 $('#slug').submit(function(e)
 {
     var post_data = $(this).serializeArray();
@@ -63,8 +77,15 @@ $('#slug').submit(function(e)
         data: post_data,
         success:function(data, text_status, jqXHR) 
         {
-            // data: return data from server
-            console.log(data, text_status, jqXHR);
+            // The data returned from the server will be two values, separated
+            // by a comma: the grade average, and the number of votes. 
+            var values = data.split(',');
+            grade_average = values[0];
+            voters = values[1];
+            var letter_grade = lookup_letter_grade(grade_average);
+            $('#" . $slug . " #result a').text(letter_grade);
+            $('#" . $slug . " #result p').text('With ' + voters + ' votes.');
+            //console.log(data, text_status, jqXHR);
         },
         error: function(jqXHR, text_status, error_thrown) 
         {
