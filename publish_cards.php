@@ -91,7 +91,7 @@ var ' . $slug . ' = {
     slug: "' . $slug . '",
     date_launch: "' . $record['Date launches'] . '",
     date_expire: "' . $record['Date expires'] . '",
-    markup_skeleton: '\n\
+    markup_skeleton: \'\n\
         <form id="' . $slug . '" action="http://denverpostplus.com/app/report-card/index.php" method="POST">\n\
             <h2></h2>\n\
             <p></p>\n\
@@ -122,10 +122,12 @@ var ' . $slug . ' = {
                 <p></p>\n\
             </div>\n\
         </form>\n\
-    ',
+    \',
     init: function()
     {
-        
+        $("#articleBody").append(this.markup_skeleton);
+        $("#' . $slug . ' > h2").text(this.title);
+        $("#' . $slug . ' > p").text(this.description);
     }
     };';
         $content .= "
