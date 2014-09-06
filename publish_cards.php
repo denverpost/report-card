@@ -197,7 +197,7 @@ $('#" . $slug . "').submit(function(e)
             $('#" . $slug . " #result').show();
             $('#" . $slug . " .submit').hide();
             $('#" . $slug . " #result a').text(letter_grade);
-            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ', ' + voters + ' have voted.</strong>');
+            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong>');
             //console.log(data, text_status, jqXHR);
         },
         error: function(jqXHR, text_status, error_thrown) 
@@ -206,6 +206,7 @@ $('#" . $slug . "').submit(function(e)
         }
     });
     e.preventDefault(); // STOP default action
+    $.cookie('$slug', 1, { path: '/', expires: 999999 });
     //e.unbind(); // unbind. to stop multiple form submit.
     $(this).attr('action', '');
 });";
