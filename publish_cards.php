@@ -14,9 +14,9 @@
 
 date_default_timezone_set('America/Denver');
 $connection = array(
-    'user' => file_get_contents('.mysql_user'),
-    'password' => file_get_contents('.mysql_pass'),
-    'host' => file_get_contents('.mysql_host'),
+    'user' => trim(file_get_contents('.mysql_user')),
+    'password' => trim(file_get_contents('.mysql_pass')),
+    'host' => trim(file_get_contents('.mysql_host')),
     'db' => 'reportcard');
 $db = new mysqli($connection['host'], $connection['user'], $connection['password'], $connection['db']);
 if ( $db->connect_errno )
@@ -37,13 +37,18 @@ function clean_string($string, $quote_char='"')
     return $string;
 }
 
-$csv = array_map('str_getcsv', file('records.csv'));
-$key = $csv[0];
+// We don't get str_getcsv() until php>5.3
+//$csv = array_map('str_getcsv', file('records.csv'));
+//$key = $csv[0];
+//foreach ( $csv as $item ):
 $i = 0;
-foreach ( $csv as $item ):
+if (($handle = fopen("records.csv", "r")) !== FALSE): 
+while (($csv = fgetcsv($handle)) !== FALSE):
     $i++;
-    if ( $i == 1 )
+    if ( $i == 1 ):
+        $key = $csv;
         continue;
+    endif;
     // Use the values of the first row as the keys in a new associative array:
     // Should result in an array looking something like:
     // array(6) {
@@ -60,7 +65,7 @@ foreach ( $csv as $item ):
     //  ["Date launches"]=>
     //  string(8) "9/7/2014"
     //}
-    $record = array_combine($key, $item);
+    $record = array_combine($key, $csv);
 
     // Check if the card exists in the database:
     $sql = 'SELECT id FROM cards WHERE slug = "' . $record['slug'] . '" LIMIT 1';
@@ -68,7 +73,7 @@ foreach ( $csv as $item ):
 
     // If it exists we don't do anything. If it doesn't, we add it to the db
     // and write / ftp a javascript representation of this data to a production server.
-    if ( mysqli_num_rows($result) == 0 ):
+    if ( mysqli_num_rows($result) == 1 ):
         
         $date_expire = '';
         $date_launch = '';
@@ -80,7 +85,7 @@ foreach ( $csv as $item ):
         $sql = 'INSERT INTO cards (slug, title, description, date_launch, date_expire, grade_average, grades) 
                 VALUES
                 ("' . $record['slug'] . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
-        $result = $db->query($sql);
+//        $result = $db->query($sql);
 
         // Now we write the file
         $slug = str_replace('-', '_', $record['slug']);
@@ -96,14 +101,15 @@ var ' . $slug . ' = {
             <h2></h2>\n\
             <p></p>\n\
             <div class="letter_grades">\n\
-                <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>\n\
-                <div><a href="#" class="letter" id="b" onClick="update_form(this);">B</a></div>\n\
-                <div><a href="#" class="letter" id="c" onClick="update_form(this);">C</a></div>\n\
-                <div><a href="#" class="letter" id="d" onClick="update_form(this);">D</a></div>\n\
-                <div><a href="#" class="letter" id="f" onClick="update_form(this);">F</a></div>\n\
+                <div><a href="#" class="letter" id="a" onClick="' . $slug . 'update_form(this); return false;">A</a></div>\n\
+                <div><a href="#" class="letter" id="b" onClick="' . $slug . 'update_form(this); return false;">B</a></div>\n\
+                <div><a href="#" class="letter" id="c" onClick="' . $slug . 'update_form(this); return false;">C</a></div>\n\
+                <div><a href="#" class="letter" id="d" onClick="' . $slug . 'update_form(this); return false;">D</a></div>\n\
+                <div><a href="#" class="letter" id="f" onClick="' . $slug . 'update_form(this); return false;">F</a></div>\n\
             </div>\n\
 \n\
             <input type="hidden" id="grade_input" name="grade_input" value="-1" />\n\
+            <input type="hidden" id="slug" name="slug" value="' . $slug . '" />\n\
 \n\
             <!-- For non-javascript-enabled browsers -->\n\
             <select id="grade_select" size="5">\n\
@@ -114,9 +120,9 @@ var ' . $slug . ' = {
                 <option value="1">D</option>\n\
                 <option value="0">F</option>\n\
             </select>\n\
-            <script>jQuery("#grade_select").hide();</script>\n\
+            <script>jQuery("#' . $slug . ' #grade_select").hide();</script>\n\
 \n\
-            <input type="image" src="images/default/grade-submit.gif" alt="Submit Your Grade">\n\
+            <input class="submit" type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade">\n\
             <div id="result">\n\
                 <div><a class="letter"></a></div>\n\
                 <p></p>\n\
@@ -134,7 +140,7 @@ var ' . $slug . ' = {
 window.onload = ' . $slug . '.init();
 ';
         $content .= "
-function update_form(element)
+function " . $slug . "update_form(element)
 {
     // Convert letter grade to numeric value
     var lookup = {
@@ -144,7 +150,16 @@ function update_form(element)
         d: 1,
         f: 0
     };
-    jQuery('#slug #grade_input').val(lookup[element.id]);
+    var letters = ['a', 'b', 'c', 'd', 'f'];
+    var letter_count = 5;
+    for ( i = 0; i < letter_count; i++ )
+    {
+        jQuery('#$slug .letter_grades #' + letters[i]).removeClass('letter_highlight');
+    }
+
+    jQuery('#$slug .letter_grades #' + element.id).addClass('letter_highlight');
+    jQuery('#$slug #grade_input').val(lookup[element.id]);
+    return false;
 }
 
 function lookup_letter_grade(avg)
@@ -179,8 +194,10 @@ $('#" . $slug . "').submit(function(e)
             grade_average = values[0];
             voters = values[1];
             var letter_grade = lookup_letter_grade(grade_average);
+            $('#" . $slug . " #result').show();
+            $('#" . $slug . " .submit').hide();
             $('#" . $slug . " #result a').text(letter_grade);
-            $('#" . $slug . " #result p').text('With ' + voters + ' votes.');
+            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ', ' + voters + ' have voted.</strong>');
             //console.log(data, text_status, jqXHR);
         },
         error: function(jqXHR, text_status, error_thrown) 
@@ -189,11 +206,13 @@ $('#" . $slug . "').submit(function(e)
         }
     });
     e.preventDefault(); // STOP default action
-    e.unbind(); // unbind. to stop multiple form submit.
+    //e.unbind(); // unbind. to stop multiple form submit.
+    $(this).attr('action', '');
 });";
  
 
         
-        file_put_contents('_output/' . $slug, $content);
+        file_put_contents('_output/' . $slug . '.js', $content);
     endif;
-endforeach;
+endwhile;
+endif;
