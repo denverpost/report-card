@@ -22,6 +22,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `cards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(100) COLLATE utf8_bin NOT NULL,
+  `group_slug` varchar(100) COLLATE utf8_bin NOT NULL,
   `title` varchar(250) COLLATE utf8_bin NOT NULL,
   `description` text COLLATE utf8_bin NOT NULL,
   `date_expire` date DEFAULT NULL,

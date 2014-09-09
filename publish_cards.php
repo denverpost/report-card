@@ -59,6 +59,8 @@ foreach ( $csv as $item ):
     //  string(0) ""
     //  ["Date launches"]=>
     //  string(8) "9/7/2014"
+    //  ["Group slug"]=>
+    //  string(8) "group-slug"
     //}
     $record = array_combine($key, $item);
 
