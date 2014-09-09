@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>{{title}}</title>
+    <title>Report Card: {{title}}</title>
     <meta name="description" content="">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -17,6 +17,7 @@
     .letter_grades > div, #result > div { padding-top:20px!important; }
     #result > div { padding-top:50px !important; }
     </style>
+    <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
 </head>
 <body>
 <div id="wait" style="position: absolute; top: 200; left: 200; visibility:hidden; font-size: 1pt; color: white;">
@@ -167,6 +168,25 @@
     </section>
     <footer>
     </footer>
-    <script type="text/javascript" src="http://local.denverpost.com/common/dfm/dfm-nav/dfm-nav-core.js"></script>
+    <script>
+var _sf_async_config={};
+/** CONFIGURATION START **/
+_sf_async_config.uid = 2671;
+_sf_async_config.domain = "denverpost.com";
+/** CONFIGURATION END **/
+(function(){
+  function loadChartbeat() {
+    window._sf_endpt=(new Date()).getTime();
+    var e = document.createElement("script");
+    e.setAttribute("language", "javascript");
+    e.setAttribute("type", "text/javascript");
+    e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
+    document.body.appendChild(e);
+  }
+  var oldonload = window.onload;
+  window.onload = (typeof window.onload != "function") ?
+     loadChartbeat : function() { oldonload(); loadChartbeat(); };
+})();
+    </script>
 </body>
 </html>
