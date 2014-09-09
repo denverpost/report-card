@@ -231,7 +231,7 @@ $('#" . $slug . "').submit(function(e)
  
 
         
-        file_put_contents('_output/cache/' . $slug . '.js', $content);
+        file_put_contents('_output/cache/' . $record['slug'] . '.js', $content);
     endif;
 endwhile;
 endif;
