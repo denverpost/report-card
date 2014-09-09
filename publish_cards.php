@@ -30,7 +30,7 @@ $connection = array(
 $db = new mysqli($connection['host'], $connection['user'], $connection['password'], $connection['db']);
 if ( $db->connect_errno )
 {
-    //die('Could not connect to database: ' . $db->connect_error);
+    die('Could not connect to database: ' . $db->connect_error);
 }
 
 function clean_string($string, $quote_char='"')
@@ -46,7 +46,7 @@ function clean_string($string, $quote_char='"')
     return $string;
 }
 
-// We don't get str_getcsv() until php>5.3
+// We don't get str_getcsv() until php>5.3 (THANKS, PRODUCTION.)
 //$csv = array_map('str_getcsv', file('records.csv'));
 //$key = $csv[0];
 //foreach ( $csv as $item ):
@@ -58,6 +58,8 @@ while (($csv = fgetcsv($handle)) !== FALSE):
         $key = $csv;
         continue;
     endif;
+    $record = array_combine($key, $csv);
+
     // Use the values of the first row as the keys in a new associative array:
     // Should result in an array looking something like:
     // array(6) {
@@ -74,7 +76,6 @@ while (($csv = fgetcsv($handle)) !== FALSE):
     //  ["Date launches"]=>
     //  string(8) "9/7/2014"
     //}
-    $record = array_combine($key, $csv);
 
     // Check if the card exists in the database:
     $sql = 'SELECT id FROM cards WHERE slug = "' . $record['slug'] . '" LIMIT 1';
@@ -93,13 +94,18 @@ while (($csv = fgetcsv($handle)) !== FALSE):
             $date_launch = strftime('%Y-%m-%d', strtotime($record['Date launches']));
 
 
+        // Validate slug input
+        $group_slug = preg_replace("/[^-_a-z0-9 ]/", '', strtolower($record['Group slug']));
+        $slug = preg_replace("/[^-_a-z0-9 ]/", '', strtolower($record['slug']));
+
         $sql = 'INSERT INTO cards (slug, group_slug, title, description, date_launch, date_expire, grade_average, grades) 
                 VALUES
-                ("' . $record['slug'] . '", "' . $record['Group slug'] . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
+                ("' . $slug . '", "' . $group_slug . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
         if ( $filesonly == FALSE )
             $result = $db->query($sql);
 
-        // Now we write the file
+        // Now we write the file.
+        // We replace dashes with underscores.
         $slug = str_replace('-', '_', $record['slug']);
         $content = '
 var ' . $slug . ' = {
@@ -143,8 +149,8 @@ var ' . $slug . ' = {
     \',
     init: function()
     {
-        // HARD-CODED, for now ***
-        $("#articleBody").append(this.markup_skeleton);
+        if ( $("#articleBody").length ) $("#articleBody").append(this.markup_skeleton);
+        else $("body").append(this.markup_skeleton);
         $("#' . $slug . ' > h2").text(this.title);
         $("#' . $slug . ' > p").text(this.description);
     }
