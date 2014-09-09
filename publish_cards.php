@@ -12,6 +12,15 @@
 // :92,110s/\n/\\n\\\r/
 // where 92 and 110 are the lines to start replace and the lines to end.
 
+// Command-line execution note:
+// If the parameter 'filesonly' is passed, we rewrite the files
+$filesonly = FALSE;
+foreach ( $_SERVER['argv'] as $arg ):
+    if ( $arg == 'filesonly' ):
+        $filesonly = TRUE;
+    endif;
+endforeach;
+
 date_default_timezone_set('America/Denver');
 $connection = array(
     'user' => trim(file_get_contents('.mysql_user')),
@@ -73,8 +82,9 @@ while (($csv = fgetcsv($handle)) !== FALSE):
 
     // If it exists we don't do anything. If it doesn't, we add it to the db
     // and write / ftp a javascript representation of this data to a production server.
-    if ( mysqli_num_rows($result) == 1 ):
+    if ( mysqli_num_rows($result) == 0 || $filesonly == TRUE ):
         
+        // *** We're not doing anything with these date fields, yet.
         $date_expire = '';
         $date_launch = '';
         if ( trim($record['Date expires']) != '' )
@@ -82,10 +92,12 @@ while (($csv = fgetcsv($handle)) !== FALSE):
         if ( trim($record['Date launches']) != '' )
             $date_launch = strftime('%Y-%m-%d', strtotime($record['Date launches']));
 
-        $sql = 'INSERT INTO cards (slug, title, description, date_launch, date_expire, grade_average, grades) 
+
+        $sql = 'INSERT INTO cards (slug, group_slug, title, description, date_launch, date_expire, grade_average, grades) 
                 VALUES
-                ("' . $record['slug'] . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
-//        $result = $db->query($sql);
+                ("' . $record['slug'] . '", "' . $record['Group slug'] . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
+        if ( $filesonly == FALSE )
+            $result = $db->query($sql);
 
         // Now we write the file
         $slug = str_replace('-', '_', $record['slug']);
@@ -213,7 +225,7 @@ $('#" . $slug . "').submit(function(e)
  
 
         
-        file_put_contents('_output/' . $slug . '.js', $content);
+        file_put_contents('_output/cache/' . $slug . '.js', $content);
     endif;
 endwhile;
 endif;
