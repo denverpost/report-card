@@ -1,0 +1,3 @@
+# Representative crontab entry
+# Assumes path to this directory is stored in a text file in user's home directory named .dir_reportcard
+*/10 * * * * cd `cat ~/.dir_reportcard`; python get_cards.py; php publish_cards.php; php publish_flatfiles.php
