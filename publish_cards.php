@@ -216,11 +216,35 @@ $('#" . $slug . "').submit(function(e)
             grade_average = values[0];
             voters = values[1];
             var letter_grade = lookup_letter_grade(grade_average);
+
+            // If we have the response handler set up to give us the distribution
+            // of letter grades, let's assign those.
+            if ( values.length > 2 )
+            {
+                var letters = {
+                    a: values[2],
+                    b: values[3],
+                    c: values[4],
+                    d: values[5],
+                    f: values[6]
+                }
+                var percents = {
+                    a: Math.round(values[2] / count * 100),
+                    b: Math.round(values[3] / voters * 100),
+                    c: Math.round(values[4] / voters * 100),
+                    d: Math.round(values[5] / voters * 100),
+                    f: Math.round(values[6] / voters * 100)
+                }
+            }
             $('#" . $slug . " #result').show();
             $('#" . $slug . " .submit').hide();
             $('#" . $slug . " #result a').text(letter_grade);
-            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong>');
-            //console.log(data, text_status, jqXHR);
+            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong><div class='chart'></div>');
+            if ( typeof letters != 'undefined' && typeof d3 != 'undefined' )
+            {
+                // Let's Build A Chart
+                d3.select('#$slug #result .chart')
+            }
         },
         error: function(jqXHR, text_status, error_thrown) 
         {
