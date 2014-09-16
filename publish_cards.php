@@ -138,9 +138,12 @@ var ' . $slug . ' = {
                 <option value="1">D</option>\n\
                 <option value="0">F</option>\n\
             </select>\n\
-            <script>jQuery("#' . $slug . ' #grade_select").hide();</script>\n\
 \n\
-            <input class="submit" type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade">\n\
+            <input class="submit" id="' . $slug . 'submit" type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade">\n\
+            <script>\n\
+            jQuery("#' . $slug . ' #grade_select").hide();\n\
+            jQuery("#' . $slug . 'submit").prop("disabled", false);\n\
+            </script>\n\
             <div id="result">\n\
                 <div><a class="letter"></a></div>\n\
                 <p></p>\n\
@@ -177,6 +180,7 @@ function " . $slug . "update_form(element)
 
     jQuery('#$slug .letter_grades #' + element.id).addClass('letter_highlight');
     jQuery('#$slug #grade_input').val(lookup[element.id]);
+    jQuery('#" . $slug . "submit').prop('disabled', false);
     return false;
 }
 
