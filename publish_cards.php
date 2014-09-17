@@ -150,6 +150,42 @@ var ' . $slug . ' = {
             </div>\n\
         </form>\n\
     \',
+    lookup_letter_grade: function(avg)
+    {
+        // Takes a float and returns a string letter-grade representation of that value.
+        if ( avg > 3.8 ) return "A";
+        if ( avg > 3.5 ) return "A-";
+        if ( avg > 3.2 ) return "B+";
+        if ( avg > 2.8 ) return "B";
+        if ( avg > 2.5 ) return "B-";
+        if ( avg > 2.2 ) return "C+";
+        if ( avg > 1.8 ) return "C";
+        if ( avg > 1.5 ) return "C-";
+        if ( avg > .5 ) return "D";
+        return "F";
+    },
+    update_form: function(element)
+    {
+        // Convert letter grade to numeric value
+        var lookup = {
+            a: 4,
+            b: 3,
+            c: 2,
+            d: 1,
+            f: 0
+        };
+        var letters = ["a", "b", "c", "d", "f"];
+        var letter_count = 5;
+        for ( i = 0; i < letter_count; i++ )
+        {
+            jQuery("#' . $slug .' .letter_grades #" + letters[i]).removeClass("letter_highlight");
+        }
+
+        jQuery("#' . $slug . ' .letter_grades #" + element.id).addClass("letter_highlight");
+        jQuery("#' . $slug . ' #grade_input").val(lookup[element.id]);
+        jQuery("#' . $slug . 'submit").prop("disabled", false);
+        return false;
+    },
     init: function()
     {
         if ( $("#articleBody").length ) $("#articleBody").append(this.markup_skeleton);
