@@ -239,7 +239,7 @@ $('#" . $slug . "').submit(function(e)
             $('#" . $slug . " #result').show();
             $('#" . $slug . " .submit').hide();
             $('#" . $slug . " #result a').text(letter_grade);
-            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong><div class='chart'></div>');
+            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong><svg class='chart'></svg>');
             if ( typeof letters != 'undefined' && typeof d3 != 'undefined' )
             {
                 // Let's Build A Chart
