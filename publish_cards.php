@@ -178,7 +178,7 @@ var ' . $slug . ' = {
         var letter_count = 5;
         for ( i = 0; i < letter_count; i++ )
         {
-            jQuery("#' . $slug .' .letter_grades #" + letters[i]).removeClass("letter_highlight");
+            jQuery("#' . $slug . ' .letter_grades #" + letters[i]).removeClass("letter_highlight");
         }
 
         jQuery("#' . $slug . ' .letter_grades #" + element.id).addClass("letter_highlight");
@@ -265,7 +265,7 @@ $('#" . $slug . "').submit(function(e)
                     f: values[6]
                 }
                 var percents = {
-                    a: Math.round(values[2] / count * 100),
+                    a: Math.round(values[2] / voters * 100),
                     b: Math.round(values[3] / voters * 100),
                     c: Math.round(values[4] / voters * 100),
                     d: Math.round(values[5] / voters * 100),
@@ -288,9 +288,9 @@ $('#" . $slug . "').submit(function(e)
         }
     });
     e.preventDefault(); // STOP default action
-    $.cookie('$slug', 1, { path: '/', expires: 999999 });
     //e.unbind(); // unbind. to stop multiple form submit.
     $(this).attr('action', '');
+    $.cookie('$slug', 1, { path: '/', expires: 999999 });
 });";
  
 
