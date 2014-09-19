@@ -285,7 +285,7 @@ $('#" . $slug . "').submit(function(e)
             // If we have a breakdown of the letter grades, we publish them.
             if ( values.length > 2 )
             {
-                $('#" . $slug . " #result p span').text('Grades given: ' + letters.a ' A\'s, ' + letters.b + ' B\'s, ' + letters.c + ' C\'s, ' + letters.d + ' D\'s, ' letters.f + ' F\'s.');
+                $('#" . $slug . " #result p span').text('Grades given: ' + letters.a + ' A\'s, ' + letters.b + ' B\'s, ' + letters.c + ' C\'s, ' + letters.d + ' D\'s, ' + letters.f + ' F\'s.');
             }
             if ( typeof letters != 'undefined' && typeof d3 != 'undefined' )
             {
