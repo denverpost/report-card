@@ -258,7 +258,7 @@ $('#" . $slug . "').submit(function(e)
             if ( values.length > 2 )
             {
                 // Set blank values to 0
-                for ( var i = 2; i <= 6, i ++ )
+                for ( var i = 2; i <= 6; i ++ )
                 {
                     if ( values[i] == '' ) values[i] = 0;
                 }
