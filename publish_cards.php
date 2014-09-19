@@ -257,6 +257,11 @@ $('#" . $slug . "').submit(function(e)
             // of letter grades, let's assign those.
             if ( values.length > 2 )
             {
+                // Set blank values to 0
+                for ( i = 2, i ++, i <= 6 )
+                {
+                    if ( values[i] == '' ) values[i] = 0;
+                }
                 var letters = {
                     a: values[2],
                     b: values[3],
@@ -275,7 +280,13 @@ $('#" . $slug . "').submit(function(e)
             $('#" . $slug . " #result').show();
             $('#" . $slug . " .submit').hide();
             $('#" . $slug . " #result a').text(letter_grade);
-            $('#" . $slug . " #result p').html('<strong>Readers have rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong><svg class=\'chart\'></svg>');
+            $('#" . $slug . " #result p').html('<strong>Readers rated this a ' + letter_grade + ' on average, ' + voters + ' have voted.</strong><span></span><svg class=\'chart\'></svg>');
+
+            // If we have a breakdown of the letter grades, we publish them.
+            if ( values.length > 2 )
+            {
+                $('#" . $slug . " #result p span').text('Grades given: ' + letters.a ' A\'s, ' + letters.b + ' B\'s, ' + letters.c + ' C\'s, ' + letters.d + ' D\'s, ' letters.f + ' F\'s.');
+            }
             if ( typeof letters != 'undefined' && typeof d3 != 'undefined' )
             {
                 // Let's Build A Chart
