@@ -1,3 +1,5 @@
+.articleBody form h2 { clear:both; }
+form #result { display:none; }
 .letter
 {
     font-family: 'Ultra', serif;
@@ -15,16 +17,29 @@
     float: left;
     width: 100px;
     height: 100px;
-    padding-top: 20px;
+    padding-top: 35px;
     background: url('images/paper-bg-white.jpg') no-repeat;
     background: url('http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035418_paper-bg-white.jpg') no-repeat;
     background-size: contain;
 }
 #result { clear:both; }
 #result .letter { font-size: 5em; }
+#result p { padding-top:50px; }
+#result p span { display:block; }
 #result > div
 {
     width: 168px;
     height: 168px;
-    padding-top: 30px;
+    padding-top: 70px;
+}
+
+
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: middle;
 }
