@@ -9,7 +9,8 @@ import gspread
 from filewrapper.FileWrapper import FileWrapper
 from optparse import OptionParser
 import doctest
-
+import string
+from oauth2client.client import SignedJwtAssertionCredentials
 
 class Spready:
     """ Handle publishing Google Spreadsheet data
@@ -26,11 +27,13 @@ class Spready:
             self.verbose = True
         self.output_path = kwargs['output_path']
         self.sheet_name = kwargs['sheet_name']
-        google = {
-            'key': kwargs['key'],
-            'account': kwargs['account']
-        }
-        self.spread = gspread.login(google['account'], google['key'])
+
+        scope = ['https://spreadsheets.google.com/feeds']
+        self.credentials = SignedJwtAssertionCredentials(
+            os.environ.get('ACCOUNT_USER'),
+            string.replace(os.environ.get('ACCOUNT_KEY'), "\\n", "\n"),
+            scope)
+        self.spread = gspread.authorize(self.credentials)
 
     def set_sheet_name(self, value):
         """ Set the object's sheet_name var.

@@ -3,9 +3,9 @@
 import os
 import csv
 import gspread
-from spready.filewrapper.FileWrapper import FileWrapper
 from optparse import OptionParser
 from spready.spready import Spready
+import string
 
 if __name__ == '__main__':
     parser = OptionParser()
@@ -17,16 +17,13 @@ if __name__ == '__main__':
     # Ex:
     # >>> python get_cards.py
 
-    key = FileWrapper('.googlekey')
     config = {
         'output_path': '%s/_output/' % os.path.dirname(os.path.realpath(__file__)),
-        'sheet_name': 'report-card-master',
-        'account': 'joe.murphy@gmail.com',
-        'key': key.read().strip()
+        'sheet_name': 'report-card-master'
     }
     spready = Spready(**config)
     rows = spready.get_rows(options, 'responses')
-    # So. The production server runs on CentOs 5, which is the root of evil.
+    # So. The production server runs on CentOs 5.
     # Running a modern version of Python on CentOs 5 was doable, installing the
     # necessary dependencies was not.
     # We've got three things we need to do with the spreadsheet data:
