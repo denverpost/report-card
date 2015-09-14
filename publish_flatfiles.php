@@ -33,7 +33,8 @@ if (($handle = fopen("records.csv", "r")) !== FALSE):
 
 
     foreach ( $groups as $group_slug => $body ):
-        $content = str_replace('{{title}}', '', $template);
+        $title = ucwords(str_replace('-', ' ', $group_slug));
+        $content = str_replace('{{title}}', $title . ' ', $template);
         $content = str_replace('{{body}}', $body, $content);
         file_put_contents('_output/group/' . $group_slug . '.html', $content);
     endforeach;
