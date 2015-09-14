@@ -14,10 +14,10 @@
 
 // Command-line execution note:
 // If the parameter 'filesonly' is passed, we rewrite the files
-$filesonly = FALSE;
+$filesonly = 0;
 foreach ( $_SERVER['argv'] as $arg ):
     if ( $arg == 'filesonly' ):
-        $filesonly = TRUE;
+        $filesonly = 1;
     endif;
 endforeach;
 
@@ -37,6 +37,7 @@ function clean_string($string, $quote_char='"')
 {
     // Clean a string so it's suitable for writing in a javascript file.
     // Defaults to escaping out for double quotes.
+    $string = trim($string);
     $string = str_replace("\n", '', $string);
     if ( $quote_char == '"' ):
         $string = str_replace('"', '\"', $string);
@@ -77,13 +78,15 @@ while (($csv = fgetcsv($handle)) !== FALSE):
     //  string(8) "9/7/2014"
     //}
 
+    $record['slug'] = trim($record['slug']);
+    $record['Group slug'] = trim($record['Group slug']);
     // Check if the card exists in the database:
     $sql = 'SELECT id FROM cards WHERE slug = "' . $record['slug'] . '" LIMIT 1';
     $result = $db->query($sql);
 
     // If it exists we don't do anything. If it doesn't, we add it to the db
     // and write / ftp a javascript representation of this data to a production server.
-    if ( mysqli_num_rows($result) == 0 || $filesonly == TRUE ):
+    if ( mysqli_num_rows($result) == 0 || $filesonly == 1 ):
         
         // *** We're not doing anything with these date fields, yet.
         $date_expire = '';
@@ -101,7 +104,7 @@ while (($csv = fgetcsv($handle)) !== FALSE):
         $sql = 'INSERT INTO cards (slug, group_slug, title, description, date_launch, date_expire, grade_average, grades) 
                 VALUES
                 ("' . $slug . '", "' . $group_slug . '", "' . $record['Title'] . '", "' . $record['Description'] . '", "' . $date_launch . '", "' . $date_expire . '", 0, 0)';
-        if ( $filesonly == FALSE )
+        if ( $filesonly == 0 )
             $result = $db->query($sql);
 
         // Now we write the file.
@@ -301,7 +304,7 @@ $('#" . $slug . "').submit(function(e)
     e.preventDefault(); // STOP default action
     //e.unbind(); // unbind. to stop multiple form submit.
     $(this).attr('action', '');
-    $.cookie('$slug', 1, { path: '/', expires: 999999 });
+    //$.cookie('$slug', 1, { path: '/', expires: 999999 });
 });";
  
 

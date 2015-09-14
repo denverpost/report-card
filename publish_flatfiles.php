@@ -19,11 +19,13 @@ if (($handle = fopen("records.csv", "r")) !== FALSE):
             continue;
         endif;
         $record = array_combine($key, $csv);
+        $record['slug'] = trim($record['slug']);
+        $record['Group slug'] = trim($record['Group slug']);
         $body = '<script src="' . $file_path . 'cache/' . $record['slug'] . '.js"></script>';
         $content = str_replace('{{title}}', $record['Title'], $template);
         $content = str_replace('{{body}}', $body, $content);
         file_put_contents('_output/' . $record['slug'] . '.html', $content);
-        if ( trim($record['Group slug']) != '' ):
+        if ( $record['Group slug'] != '' ):
             $groups[$record['Group slug']] .= $body;
         endif;
     
