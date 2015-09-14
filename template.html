@@ -17,8 +17,18 @@
     .letter_grades > div, #result > div { padding-top:20px!important; }
     #result > div { padding-top:50px !important; }
     </style>
-    <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
     <script type="text/javascript" src="http://www.googletagservices.com/tag/js/gpt.js"></script>
+
+    <script>
+        var iframe = '', kiosk = '';
+        if ( document.location.hash === '#iframe' ) iframe = 1;
+        if ( document.location.hash === '#kiosk' ) { iframe = 1; kiosk = 1; }
+        if ( iframe === '' ) {
+        //Chartbeat startup
+        var _sf_startpt=(new Date()).getTime();
+        var _sf_async_config={};
+        }
+    </script>
 </head>
 <body>
 <!-- Google Tag Manager Data Layer -->
@@ -92,6 +102,26 @@
         {{body}}
     </section>
     <footer>
+    <div id='dfp-20' style="margin-bottom:10px;">
+        <script type='text/javascript'>
+        if ( iframe === '' ) {
+            googletag.defineSlot('/8013/denverpost.com/News',[[300,250],[300,600],[160,600],[300,1050]], 'dfp-20').addService(googletag.pubads()).setTargeting('pos',['Cube1_RRail_ATF']).setTargeting('kv','sports');                                          
+            googletag.pubads().enableSyncRendering();
+            googletag.enableServices();                                         
+            googletag.display('dfp-20');
+        }
+        </script>
+    </div>
+    <div id='dfp-21' style="margin-bottom:10px;">
+        <script type='text/javascript'>
+        if ( iframe === '' ) {
+            googletag.defineSlot('/8013/denverpost.com/News',[[300,250]], 'dfp-21').addService(googletag.pubads()).setTargeting('pos',['Cube2_RRail_mid']).setTargeting('kv','sports');
+            googletag.pubads().enableSyncRendering();
+            googletag.enableServices();                                         
+            googletag.display('dfp-21');
+        }
+        </script>
+    </div>
     <p>Copyright &copy; 2014-2015 <a href="http://www.denverpost.com/">The Denver Post</a></p>
     <p>
         &bull; <a href="http://www.denverpost.com/broncos">Denver Broncos</a>
