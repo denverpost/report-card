@@ -1,3 +1,3 @@
-#git@gist.github.com:/584ee95db4b05ecb1ac5.git#egg=FileWrapper
-gspread
-httplib2
+gspread==0.2.5
+httplib2==0.9.1
+wsgiref==0.1.2
