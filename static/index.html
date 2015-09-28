@@ -86,31 +86,35 @@ $('#slug').submit(function(e)
  
 //$('#slug').submit();
 </script>
-        <form id="slug" action="http://denverpostplus.com/app/report-card/index.php" method="POST">
+            <form id="slug" action="http://denverpostplus.com/app/report-card/index.php" method="POST">
             <h2></h2>
             <p></p>
             <div class="letter_grades">
-                <div><a href="#" class="letter" id="a" onClick="update_form(this);">A</a></div>
-                <div><a href="#" class="letter" id="b" onClick="update_form(this);">B</a></div>
-                <div><a href="#" class="letter" id="c" onClick="update_form(this);">C</a></div>
-                <div><a href="#" class="letter" id="d" onClick="update_form(this);">D</a></div>
-                <div><a href="#" class="letter" id="f" onClick="update_form(this);">F</a></div>
+                <div><a href="#" class="letter" id="a" onclick="slugupdate_form(this); return false;">A</a></div>
+                <div><a href="#" class="letter" id="b" onclick="slugupdate_form(this); return false;">B</a></div>
+                <div><a href="#" class="letter" id="c" onclick="slugupdate_form(this); return false;">C</a></div>
+                <div><a href="#" class="letter" id="d" onclick="slugupdate_form(this); return false;">D</a></div>
+                <div><a href="#" class="letter" id="f" onclick="slugupdate_form(this); return false;">F</a></div>
             </div>
 
-            <input type="hidden" id="grade_input" name="grade_input" value="-1" />
+            <input type="hidden" id="grade_input" name="grade_input" value="-1">
+            <input type="hidden" id="slug" name="slug" value="slug">
 
             <!-- For non-javascript-enabled browsers -->
-            <select id="grade_select" size="5">
-                <option value="-1" default></option>
+            <select id="grade_select" size="5" style="display: none;">
+                <option value="-1" default=""></option>
                 <option value="4">A</option>
                 <option value="3">B</option>
                 <option value="2">C</option>
                 <option value="1">D</option>
                 <option value="0">F</option>
             </select>
-            <script>jQuery("#grade_select").hide();</script>
 
-            <input type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade">
+            <input class="submit" id="slugsubmit" type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade" disabled="">
+            <script>
+            jQuery("#slug #grade_select").hide();
+            jQuery("#slugsubmit").prop("disabled", true);
+            </script>
             <div id="result">
                 <div><a class="letter"></a></div>
                 <p></p>
