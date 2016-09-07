@@ -22,7 +22,7 @@
     <script>
         var iframe = '', kiosk = '';
         if ( document.location.hash === '#iframe' ) iframe = 1;
-        if ( document.location.hash === '#kiosk' ) { iframe = 1; kiosk = 1; }
+        if ( window.top !== window.self ) { iframe = 1; }
         if ( iframe === '' ) {
         //Chartbeat startup
         var _sf_startpt=(new Date()).getTime();
@@ -56,10 +56,10 @@
         'Mobile Presentation':is_mobile(),
         'Release Version':'',
         'Digital Publisher':'',
-        'Platform':'NGPS',
+        'Platform':'',
         'Content Source':'denverpost.com',
         'Slug':'',
-        'Publisher State':'CO',
+        'Publisher State':'COLORADO',
         'Byline':'',
         'User ID':'',
     "Publisher Domain": "denverpost.com",
@@ -95,6 +95,8 @@
 })
 (window,document,'script','dataLayer','GTM-TLFP4R');
 </script><!-- End Google Tag Manager -->
+<div id="dfmHeader"><!--Header Goes Here--></div>
+
     <header>
         <h1>{{title}}</h1>
     </header>
@@ -103,7 +105,7 @@
     </section>
     <footer>
     <div id='dfp-20' style="margin-bottom:10px;">
-        <script type='text/javascript'>
+        <script>
         if ( iframe === '' ) {
             googletag.defineSlot('/8013/denverpost.com/News',[[300,250],[300,600],[160,600],[300,1050]], 'dfp-20').addService(googletag.pubads()).setTargeting('pos',['Cube1_RRail_ATF']).setTargeting('kv','sports');                                          
             googletag.pubads().enableSyncRendering();
@@ -113,7 +115,7 @@
         </script>
     </div>
     <div id='dfp-21' style="margin-bottom:10px;">
-        <script type='text/javascript'>
+        <script>
         if ( iframe === '' ) {
             googletag.defineSlot('/8013/denverpost.com/News',[[300,250]], 'dfp-21').addService(googletag.pubads()).setTargeting('pos',['Cube2_RRail_mid']).setTargeting('kv','sports');
             googletag.pubads().enableSyncRendering();
@@ -134,15 +136,13 @@ var _sf_async_config={};
 /** CONFIGURATION START **/
 _sf_async_config.uid = 2671;
 _sf_async_config.domain = "denverpost.com";
-_sf_async_config.sections = 'sports,data,broncos,mobile';
+_sf_async_config.sections = 'sports,data,broncos,mobile,vendor,';
 
 /** CONFIGURATION END **/
 (function(){
   function loadChartbeat() {
     window._sf_endpt=(new Date()).getTime();
     var e = document.createElement("script");
-    e.setAttribute("language", "javascript");
-    e.setAttribute("type", "text/javascript");
     e.setAttribute('src', '//static.chartbeat.com/js/chartbeat.js');
     document.body.appendChild(e);
   }
@@ -152,5 +152,13 @@ _sf_async_config.sections = 'sports,data,broncos,mobile';
 })();
     </script>
     </footer>
+    <div id="dfmFooter" style="border-top:1px solid #ddd;"><!--CORPORATE FOOTER--></div>
+    <script>
+    if ( iframe === '' ) {
+        var v = document.createElement("script");
+        v.setAttribute('src', 'http://extras.denverpost.com/vendor_templates/mason/vendor-include.js');
+        document.body.appendChild(v);
+    }
+    </script>
 </body>
 </html>
