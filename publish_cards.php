@@ -142,7 +142,7 @@ var ' . $slug . ' = {
                 <option value="0">F</option>\n\
             </select>\n\
 \n\
-            <input class="submit" id="' . $slug . 'submit" type="image" src="http://extras.mnginteractive.com/live/media/site36/2014/0905/20140905_035618_grade-submit.gif" alt="Submit Your Grade">\n\
+            <input id="' . $slug . 'submit" type="submit">\n\
             <script>\n\
             jQuery("#' . $slug . ' #grade_select").hide();\n\
             jQuery("#' . $slug . 'submit").prop("disabled", true);\n\
