@@ -303,7 +303,7 @@ $('#" . $slug . "').submit(function(e)
     });
     e.preventDefault(); // STOP default action
     //e.unbind(); // unbind. to stop multiple form submit.
-    jQuery('#" . $slug . "submit').prop('disabled', true);
+    jQuery('#" . $slug . "submit').remove();
     $(this).attr('action', '');
     //$.cookie('$slug', 1, { path: '/', expires: 999999 });
 });";
