@@ -142,7 +142,7 @@ var ' . $slug . ' = {
                 <option value="0">F</option>\n\
             </select>\n\
 \n\
-            <input id="' . $slug . 'submit" type="submit" value="Send in your grade">\n\
+            <input id="' . $slug . 'submit" type="submit" value="Submit your grade">\n\
             <script>\n\
             jQuery("#' . $slug . ' #grade_select").hide();\n\
             jQuery("#' . $slug . 'submit").prop("disabled", true);\n\
@@ -303,6 +303,7 @@ $('#" . $slug . "').submit(function(e)
     });
     e.preventDefault(); // STOP default action
     //e.unbind(); // unbind. to stop multiple form submit.
+    jQuery('#" . $slug . "submit').prop('disabled', true);
     $(this).attr('action', '');
     //$.cookie('$slug', 1, { path: '/', expires: 999999 });
 });";
